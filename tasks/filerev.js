@@ -12,7 +12,8 @@ module.exports = function (grunt) {
     var filerev = grunt.filerev || {summary: {}};
     var options = this.options({
       algorithm: 'md5',
-      length: 8
+      length: 8,
+      overwrite: true
     });
 
     eachAsync(this.files, function (el, i, next) {
@@ -69,7 +70,9 @@ module.exports = function (grunt) {
         } else {
           dirname = el.dest;
           resultPath = path.resolve(dirname, newName);
-          grunt.file.copy(file, resultPath);
+          if (!grunt.file.exists(resultPath) || options.overwrite) {
+            grunt.file.copy(file, resultPath);
+          }
         }
 
         // Source maps
